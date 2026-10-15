@@ -1,22 +1,65 @@
 package csd230.lab1.entities;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-@Entity @DiscriminatorValue("MAGAZINE")
+
+
+@Entity
+@DiscriminatorValue("MAGAZINE")
 public class MagazineEntity extends PublicationEntity {
-    private int orderQty;
-    private LocalDateTime currentIssue;
+
+    private String publisher;
+    private int issueNumber;
+
+
     public MagazineEntity() {}
-    public MagazineEntity(String t, double p, int c, int o, LocalDateTime d) { super(t, p, c); this.orderQty = o; this.currentIssue = d; }
-    public int getOrderQty() { return orderQty; }
-    public void setOrderQty(int o) { this.orderQty = o; }
-    public void setCurrentIssue(LocalDateTime d) { this.currentIssue = d; }
-    public LocalDateTime getCurrentIssue() { return currentIssue; }
-    @Override public String toString() { return "Mag{issue=" + currentIssue + ", " + super.toString() + "}"; }
+
+    public MagazineEntity(String title, double price, int copies, String author, int pages,
+                          String publisher, int issueNumber) {
+
+        super(title, price, copies);
+        setAuthor(author);
+        setPages(pages);
+
+        this.publisher = publisher;
+        this.issueNumber = issueNumber;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public int getIssueNumber() {
+        return issueNumber;
+    }
+
+    public void setIssueNumber(int issueNumber) {
+        this.issueNumber = issueNumber;
+    }
+
+    @Override
+    public void sellItem() {
+        if (getCopies() > 0) {
+            setCopies(getCopies() - 1);
+            System.out.println("Sold Magazine: " + getTitle() + " (Issue " + issueNumber + ")");
+        } else {
+            System.out.println("Cannot sell '" + getTitle() + "'. Out of stock.");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Magazine{publisher='" + publisher + "', issue=" + issueNumber + ", " + super.toString() + "}";
+    }
+
+
 }
